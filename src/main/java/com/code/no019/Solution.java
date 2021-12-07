@@ -54,10 +54,28 @@ public class Solution {
         return dummy.next;
     }
 
+    public ListNode removeNthFromEnd02(ListNode head, int n) {
+        ListNode dummy = new ListNode(-1, head);
+        ListNode first = dummy;
+        ListNode second = dummy;
+
+        for (int i = 1; i <= n + 1; i++) {
+            first = first.next;
+        }
+
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+
+        second.next = second.next.next;
+        return dummy.next;
+    }
+
     /**
      * 双指针
      */
-    public ListNode removeNthFromEnd02(ListNode head, int n) {
+    public ListNode removeNthFromEnd03(ListNode head, int n) {
         ListNode dummy = new ListNode(-1, head);
         ListNode fist = head;
         ListNode second = dummy;
