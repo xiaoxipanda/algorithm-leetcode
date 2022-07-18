@@ -1,14 +1,12 @@
 package com.code.hash.no018;
 
-import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -23,9 +21,44 @@ import java.util.function.Supplier;
 public class Solution {
 
     public List<List<Integer>> fourSum(int[] nums, int target) {
-
-        return null;
+        // 排序
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            // 去重
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for (int j = i + 1; j < nums.length; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = nums.length - 1;
+                while (left < right) {
+                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum > target) {
+                        right--;
+                    } else if (sum < target) {
+                        left++;
+                    } else {
+                        res.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+                        left++;
+                        right--;
+                    }
+                }
+            }
+        }
+        return res;
     }
+
+
 
     static ExecutorService executorService = new ThreadPoolExecutor(4, 16, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
 
@@ -45,7 +78,6 @@ public class Solution {
 //            }
 //        });
 //        System.out.println("2 complete:" + Thread.currentThread().getName());
-
 
 
         CompletableFuture<String> result3 = CompletableFuture.supplyAsync(new Supplier<String>() {
